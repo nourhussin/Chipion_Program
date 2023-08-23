@@ -2,60 +2,60 @@ module moore_detector (
     input clk,
     input reset,
     input x,
-    output reg y
+    output y
 );
+    reg [2:0] current_state, next_state;
 
-reg [1:0] state;
+    localparam S0 = 3'b000;
+    localparam S1 = 3'b001;
+    localparam S2 = 3'b010;
+    localparam S3 = 3'b011;
+    localparam S4 = 3'b100;
 
-parameter S0 = 2'b00;
-parameter S1 = 2'b01;
-parameter S2 = 2'b10;
-parameter S3 = 2'b11;
+    /* Register Logic*/
+    always @(posedge clk or posedge reset) begin
+        if (reset) 
+            current_state <= S0;
+        else 
+            current_state <= next_state;
+    end
 
-always @(posedge clk or posedge reset) begin
-    if (reset) begin
-        state <= S0;
-        y <= 0;
-    end else begin
-        case (state)
-            S0: begin
-                if (x) begin
-                    state <= S1;
-                    y <= 0;
-                end else begin
-                    state <= S0;
-                    y <= 0;
-                end
-            end
-            S1: begin
-                if (x) begin
-                    state <= S2;
-                    y <= 0;
-                end else begin
-                    state <= S0;
-                    y <= 0;
-                end
-            end
-				S2: begin
-                if (x) begin
-                    state <= S2;
-                    y <= 0;
-                end else begin
-                    state <= S3;
-                    y <= 0;
-                end
-            end
-				S3: begin
-                if (x) begin
-                    state <= S1;
-                    y <= 1;
-                end else begin
-                    state <= S0;
-                    y <= 0;
-                end
-            end
+    /* Next State Logic*/
+    always @(*) begin
+        case(current_state)
+        S0: 
+            if(x)
+                next_state <= S1;
+            else
+                next_state <= S0;
+
+        S1: 
+            if(x)
+                next_state <= S2;
+            else
+                next_state <= S0;
+
+        S2:
+            if(x)
+                next_state <= S2;
+            else
+                next_state <= S3;
+
+        S3:
+            if(x)
+                next_state <= S4;
+            else
+                next_state <= S0;
+
+        S4:
+            if(x)
+                next_state <= S1;
+            else
+                next_state <= S0;
         endcase
     end
-end
+
+    /* Output Logic*/
+    assign y = (current_state == S4)? 1'b1 : 1'b0;
 
 endmodule
