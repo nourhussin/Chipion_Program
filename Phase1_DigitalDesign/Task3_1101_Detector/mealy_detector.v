@@ -2,90 +2,54 @@ module mealy_detector (
     input clk,
     input reset,
     input x,
-    output reg y
+    output  y
 );
 
-parameter S0 = 3'b000;
-parameter S1 = 3'b001;
-parameter S2 = 3'b010;
-parameter S3 = 3'b011;
-parameter S4 = 3'b100;
+parameter S0 = 2'b00;
+parameter S1 = 2'b01;
+parameter S2 = 2'b10;
+parameter S3 = 2'b11;
 
-wire [2:0] state_next;
-reg [2:0] state;
+reg [2:0] current_state, next_state;
 
+/* Register Logic*/
 always @(posedge clk or posedge reset) begin
-    if (reset) begin
-        state <= S0;
-        y <= 0;
-	 end 
-	 else begin
-        state <= state_next;
-        y <= (state == S4);
-    end
+    if (reset)
+        current_state <= S0;
+    else
+        current_state <= next_state;
 end
 
-fsm_state_transition transition_unit (
-    .clk(clk),
-    .reset(reset),
-    .x(x),
-    .state(state),
-    .state_next(state_next)
-);
-
-endmodule
-
-module fsm_state_transition (
-    input clk,
-    input reset,
-    input x,
-    input [2:0] state,
-    output reg [2:0] state_next
-);
-parameter S0 = 3'b000;
-parameter S1 = 3'b001;
-parameter S2 = 3'b010;
-parameter S3 = 3'b011;
-parameter S4 = 3'b100;
-
+/* Next State Logic*/
 always @(*) begin
-    case (state)
-        S0: begin
-            if (x) begin
-                state_next = S1;
-            end else begin
-                state_next = S0;
-            end
-        end
-        S1: begin
-            if (x) begin
-                state_next = S2;
-            end else begin
-                state_next = S0;
-            end
-        end
-		  S2: begin
-            if (x) begin
-                state_next = S2;
-            end else begin
-                state_next = S3;
-            end
-        end
-		  S3: begin
-            if (x) begin
-                state_next = S4;
-            end else begin
-                state_next = S0;
-            end
-        end
-		  S4: begin
-            if (x) begin
-                state_next = S1;
-            end else begin
-                state_next = S0;
-            end
-        end
+    case(current_state)
+    S0:
+        if(x)
+            next_state <= S1;
+        else
+            next_state <= S0;
+
+    S1:
+        if(x)
+            next_state <= S2;
+        else
+            next_state <= S0;
+            
+    S2:
+        if(x)
+            next_state <= S2;
+        else
+            next_state <= S3;
+            
+    S3:
+        if(x)
+            next_state <= S1;
+        else
+            next_state <= S0;
+            
     endcase
 end
 
+/* Output Logic*/
+assign y = (current_state==S3 && x)? 1'b1 : 1'b0;
 endmodule
