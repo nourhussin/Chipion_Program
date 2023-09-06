@@ -7,12 +7,12 @@ module counter_nbits #(parameter N = 3)(
     begin
         if(reset)
             Pcount <= 0;
-            
+
         else
         begin
             case({front_photocell,back_photocell})
 
-            2'b11: // Person entered and person exited
+            2'b00: // Person entered and person exited
                     Pcount <= Pcount;
 
             2'b10: // Person entered
@@ -29,7 +29,7 @@ module counter_nbits #(parameter N = 3)(
                     else
                         Pcount <= Pcount -1;
 
-            2'b00: // Nothing happed
+            2'b11: // Nothing happed
                     Pcount <= Pcount;
 
             endcase

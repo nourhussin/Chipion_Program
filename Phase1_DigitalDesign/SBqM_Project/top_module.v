@@ -9,6 +9,36 @@ module top_module(
     output [2:0] Pcount,
     output [4:0] Wtime
 );
+    wire ROM_enable;
 
+    ROM Mem(
+        .clk(clk),
+        .ROM_enable(ROM_enable),
+        .Tcount(Tcount),
+        .Pcount(Pcount),
+        .Wtime(Wtime)
+    );
+
+    queue_status QS(
+        .clk(clk),
+        .reset(reset),
+        .Pcount(Pcount),
+        .empty_flag(empty_flag),
+        .full_flag(full_flag)
+    );
+
+    counter_nbits Counter(
+        .front_photocell(front_photocell),
+        .back_photocell(back_photocell),
+        .clk(clk),
+        .reset(reset),
+        .Pcount(Pcount)
+    );
+
+    calculation_controller CC(
+        .clk(clk),
+        .Pcount(Pcount),
+        .ROM_enable(ROM_enable)
+    );
 
 endmodule
