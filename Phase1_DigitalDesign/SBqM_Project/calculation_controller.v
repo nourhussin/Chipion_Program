@@ -8,10 +8,10 @@ module calculation_controller #(parameter N = 3)(
     begin
         if(Pcount == 0)
             //! No calculation
-            ROM_enable = 1'b0;
+            ROM_enable <= 1'b0;
         else
             // Calculating 
-            ROM_enable = 1'b1;
+            ROM_enable <= 1'b1;
     end 
 
 endmodule
