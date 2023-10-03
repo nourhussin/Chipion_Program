@@ -1,4 +1,4 @@
-module program_coutner(
+module program_counter(
     input clk, reset_n,
     input[31:0] PC_bar,
     output reg[31:0] PC

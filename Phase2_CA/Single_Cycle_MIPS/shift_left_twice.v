@@ -1,6 +1,7 @@
 module shift_left_twice(
-    input[31:0] in,
-    output[31:0] out
+    input[N-1:0] in,
+    output[N-1:0] out
 );
+    parameter N = 32;
     assign out = in << 2;
 endmodule
