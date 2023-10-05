@@ -17,7 +17,7 @@ module top(
         .ReadData(ReadData),
         .Instr(Instr),
         .ALU_Control(ALU_Control),
-        .jump(Jump),
+        .Jump(Jump),
         .Branch(Branch),
         .MemtoReg(MemtoReg),
         .ALUSrc(ALUSrc),

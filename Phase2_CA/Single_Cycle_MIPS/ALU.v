@@ -1,7 +1,6 @@
 module ALU(
     input[31:0] input_a, input_b,
     input[2:0] operation,
-    input clk,
     output reg[31:0] result,
     output zero_flag
 );
@@ -15,7 +14,7 @@ module ALU(
 
     assign zero_flag = ~(|result);
 
-    always @(posedge clk)
+    always @(*)
     begin
         case(operation)
         bit_and:

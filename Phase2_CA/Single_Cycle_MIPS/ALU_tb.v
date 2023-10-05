@@ -21,7 +21,6 @@ module ALU_tb;
         .input_a(input_a),
         .input_b(input_b),
         .operation(operation),
-        .clk(clk),
         .result(result),
         .zero_flag(zero_flag)
     );

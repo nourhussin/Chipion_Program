@@ -4,5 +4,5 @@ module MUX2x1(
     output[N-1:0] out
 );
     parameter N = 1;
-    assign out = (selector == 0)? in0: in1;
+    assign out = selector? in1: in0;
 endmodule

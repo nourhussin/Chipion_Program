@@ -10,7 +10,7 @@ module datapath(
     input clk, reset_n,
     input[31:0] ReadData, Instr,
     input[2:0] ALU_Control,
-    input jump, Branch, MemtoReg, ALUSrc,RegDst, RegWrite,
+    input Jump, Branch, MemtoReg, ALUSrc,RegDst, RegWrite,
     output[31:0] PC, ALU_Out, WriteData
 );
     assign PCSrc = zero_flag && Branch;
@@ -45,8 +45,7 @@ module datapath(
         .input_b(SrcB),
         .result(ALU_Out),
         .operation(ALU_Control),
-        .zero_flag(zero_flag),
-        .clk(clk)
+        .zero_flag(zero_flag)
     );
 
     MUX2x1 #(.N(32)) PCSrc_mux(
@@ -58,7 +57,7 @@ module datapath(
     MUX2x1 #(.N(32)) PCbar_mux(
         .in0(toPCbar_mux), 
         .in1({PCPlus4[31:28],Instr_shifted}), 
-        .selector(jump), 
+        .selector(Jump),
         .out(PC_bar)
     );
     MUX2x1 #(.N(32)) SrcB_mux(
@@ -89,7 +88,7 @@ module datapath(
     );
 
     adder ADD1(
-        .in1(PC), .in2(4), .result(PCPlus4)
+        .in1(PC), .in2(32'd4), .result(PCPlus4)
     );
     adder ADD2(
         .in1(SignImm_Shifted), .in2(PCPlus4), .result(PCBranch)
