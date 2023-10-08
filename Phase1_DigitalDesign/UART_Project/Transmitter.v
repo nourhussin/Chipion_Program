@@ -1,5 +1,5 @@
 module Receiver(
-    input clk, reset, tx-start, s_tick,
+    input clk, reset, tx_start, s_tick,
     input[7:0] data_in,
     output tx, tx_done_tick
 );
